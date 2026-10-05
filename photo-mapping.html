@@ -1,0 +1,9 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Photo Setup · Yash × Akanksha</title><link rel="stylesheet" href="assets/styles.css"></head><body data-page="mapper"><canvas id="fx"></canvas><div class="grain"></div><main class="page"><nav>PHOTO SETUP <a href="memories.html">BACK TO MEMORIES →</a></nav><header class="center"><small>12 PHOTOS · 12 MEMORY CHAPTERS</small><h1>Put every photo<br><em>where it belongs.</em></h1><p>Choose the correct memory for every photo. Your choices are saved in this browser and used by the Memory Universe and Memory Machine.</p></header><div id="mapper" class="mapper"></div><button id="saveMap" class="primary">SAVE PHOTO MAPPING</button></main><script src="assets/photos.js"></script><script src="assets/app.js"></script><script>
+(function(){
+ const root=document.getElementById('mapper'); const groups=window.MEMORY_GROUPS;
+ let map={}; groups.forEach(g=>g.photos.forEach(f=>map[f]=g.id));
+ try{const saved=JSON.parse(localStorage.getItem('ak_photo_map')||'{}'); Object.assign(map,saved)}catch(e){}
+ const opts=groups.map(g=>`<option value="${g.id}">${g.title}</option>`).join('');
+ for(let i=1;i<=12;i++){let f=String(i).padStart(2,'0')+'.jpg';let card=document.createElement('div');card.className='map-card';card.innerHTML=`<img src="assets/photos/${f}"><strong>${f}</strong><select data-file="${f}">${opts}</select>`;card.querySelector('select').value=map[f]||groups[0].id;root.append(card)}
+ document.getElementById('saveMap').onclick=()=>{let out={};root.querySelectorAll('select').forEach(s=>out[s.dataset.file]=s.value);localStorage.setItem('ak_photo_map',JSON.stringify(out));alert('Saved. Open Memories again.');};
+})();</script></body></html>
